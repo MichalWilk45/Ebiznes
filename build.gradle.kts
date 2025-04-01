@@ -42,6 +42,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
+    implementation("net.dv8tion:JDA:5.0.0-beta.13")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -53,5 +56,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("com.example.MainKt")
+    mainClass.set("MainKt")
 }
