@@ -31,6 +31,7 @@ def test_login_success(browser):
     time.sleep(5)
     login(browser)
     assert "dashboard" in browser.current_url
+    assert browser.title == "OrangeHRM"
 
 def test_login_failure(browser):
     browser.get(URL)
@@ -42,11 +43,14 @@ def test_login_failure(browser):
     submit.click()
     error = wait_for_element(browser, By.CLASS_NAME, "oxd-alert-content-text", timeout=5)
     assert "Invalid" in error.text
+    assert browser.title == "OrangeHRM"
 
 def test_dashboard_loaded(browser):
     login(browser)
     dashboard_header = wait_for_element(browser, By.TAG_NAME, "h6").text
     assert dashboard_header == "Dashboard"
+    assert "Dashboard" in browser.page_source
+    assert len(browser.find_elements(By.CLASS_NAME, "oxd-topbar-header")) > 0
 
 def test_menu_visibility(browser):
     login(browser)
@@ -54,6 +58,9 @@ def test_menu_visibility(browser):
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, "ul.oxd-main-menu li"))
     )
     assert len(menu) > 0
+    assert menu[0].is_displayed()
+    assert "Admin" in menu[0].text
+    assert menu[-1].is_displayed()
 
 def test_search_in_menu(browser):
     login(browser)
@@ -63,6 +70,8 @@ def test_search_in_menu(browser):
         EC.presence_of_all_elements_located((By.CLASS_NAME, "oxd-main-menu-item"))
     )
     assert any("PIM" in r.text for r in results)
+    assert len(results) > 0
+    assert "PIM" in results[0].text
 
 def test_logout(browser):
     login(browser)
@@ -72,12 +81,14 @@ def test_logout(browser):
     logout.click()
     WebDriverWait(browser, 5).until(EC.url_contains("login"))
     assert "login" in browser.current_url
+    assert browser.title == "OrangeHRM"
 
 def test_add_employee_button(browser):
     login(browser)
     wait_for_element(browser, By.LINK_TEXT, "PIM").click()
     add_btn = wait_for_element(browser, By.LINK_TEXT, "Add Employee")
     assert add_btn.is_displayed()
+    assert add_btn.text == "Add Employee"
 
 def test_add_employee_form(browser):
     login(browser)
@@ -86,6 +97,8 @@ def test_add_employee_form(browser):
     first = wait_for_element(browser, By.NAME, "firstName")
     last = wait_for_element(browser, By.NAME, "lastName")
     assert first.is_displayed() and last.is_displayed()
+    assert first.get_attribute("placeholder") == "First Name"
+    assert last.get_attribute("placeholder") == "Last Name"
 
 def test_required_field_validation(browser):
     login(browser)
@@ -96,6 +109,7 @@ def test_required_field_validation(browser):
         EC.presence_of_all_elements_located((By.CLASS_NAME, "oxd-input-field-error-message"))
     )
     assert len(error_msgs) >= 1
+    assert "Required" in error_msgs[0].text
 
 def test_user_dropdown_menu(browser):
     login(browser)
@@ -104,12 +118,14 @@ def test_user_dropdown_menu(browser):
         EC.presence_of_all_elements_located((By.CLASS_NAME, "oxd-userdropdown-link"))
     )
     assert len(dropdown_items) > 1
+    assert "Logout" in dropdown_items[-1].text
 
 def test_pim_page_title(browser):
     login(browser)
     wait_for_element(browser, By.LINK_TEXT, "PIM").click()
     title = wait_for_element(browser, By.TAG_NAME, "h6").text
     assert title == "PIM"
+    assert len(title) > 0
 
 def test_search_employee_empty(browser):
     login(browser)
@@ -119,17 +135,19 @@ def test_search_employee_empty(browser):
         EC.presence_of_all_elements_located((By.CLASS_NAME, "oxd-table-row"))
     )
     assert len(rows) >= 0
+    assert "No records found" not in browser.page_source
 
 def test_reset_filters(browser):
     login(browser)
     link = wait_for_element(browser, By.LINK_TEXT, "PIM")
     link.click()
-    employee_name = wait_for_element(browser, By.NAME, "employeeName")
+    employee_name = wait_for_element(browser, By.NAME, "employeeName", timeout=15)
     employee_name.send_keys("Test")
     reset = wait_for_element(browser, By.XPATH, "//button[text()='Reset']")
     reset.click()
     field = wait_for_element(browser, By.NAME, "employeeName")
     assert field.get_attribute("value") == ""
+    assert len(browser.find_elements(By.CLASS_NAME, "oxd-table-row")) > 0
 
 def test_left_menu_expand(browser):
     login(browser)
@@ -137,21 +155,25 @@ def test_left_menu_expand(browser):
         EC.presence_of_all_elements_located((By.CLASS_NAME, "oxd-main-menu-item"))
     )
     assert len(icons) > 0
+    assert icons[0].is_displayed()
 
 def test_url_after_login(browser):
     login(browser)
     WebDriverWait(browser, 5).until(EC.url_contains("dashboard"))
     assert "dashboard" in browser.current_url
+    assert browser.title == "OrangeHRM"
 
 def test_logo_visible(browser):
     login(browser)
     logo = wait_for_element(browser, By.CLASS_NAME, "oxd-brand-banner")
     assert logo.is_displayed()
+    assert "OrangeHRM" in logo.text
 
 def test_page_title(browser):
     browser.get(URL)
     WebDriverWait(browser, 5).until(EC.title_contains("OrangeHRM"))
     assert "OrangeHRM" in browser.title
+    assert browser.title == "OrangeHRM"
 
 def test_login_fields_present(browser):
     browser.get(URL)
@@ -159,14 +181,17 @@ def test_login_fields_present(browser):
     password = wait_for_element(browser, By.NAME, "password")
     assert username.is_displayed()
     assert password.is_displayed()
+    assert username.get_attribute("placeholder") == "Username"
+    assert password.get_attribute("placeholder") == "Password"
 
 def test_login_button_clickable(browser):
     browser.get(URL)
     button = wait_for_element(browser, By.CSS_SELECTOR, "button[type='submit']")
     assert button.is_enabled()
+    assert button.text == "LOGIN"
 
 def test_footer_visibility(browser):
     browser.get(URL)
     footer = wait_for_element(browser, By.CLASS_NAME, "orangehrm-login-footer-sm")
     assert footer.is_displayed()
-
+    assert "Powered by OrangeHRM" in footer.text
