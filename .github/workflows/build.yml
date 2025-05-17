@@ -6,11 +6,11 @@ on:
       - zad_5
   pull_request:
     types: [opened, synchronize, reopened]
-    workflow_dispatch:
+  workflow_dispatch:
 jobs:
   sonarqube:
     name: SonarQube
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
