@@ -40,7 +40,7 @@ Zadanie 5 React
 
 Kod: branch - zad_5
 
-ZAdanie 6 Testy
+Zadanie 6 Testy
 
 ✅ 3.0 wymaganie 1 [Link do commita 1](https://github.com/MichalWilk45/Ebiznes/commit/6d558b98a972bfc08af1579a87143b4bc8300948)
 
@@ -53,3 +53,17 @@ ZAdanie 6 Testy
 ❌ 5.0 wymaganie 5 Link do commita 5
 
 Kod: branch - zad_6
+
+Zadanie 7 Sonar
+
+✅ 3.0 wymaganie 1 [Link do commita 1](https://github.com/MichalWilk45/Ebiznes/commit/13311e54ba23eb89a071ddbba68d473629a326c9)
+
+✅ 3.5 wymaganie 2 [Link do commita2]()
+
+✅ 4.0 wymaganie 3 [Link do commita 3](
+
+✅ 4.5 wymaganie 4 [Link do commita 4]()
+
+❌ 5.0 wymaganie 5 Link do commita 5
+
+Kod: branch - zad_5 i zad_4
